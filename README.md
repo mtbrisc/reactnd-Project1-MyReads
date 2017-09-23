@@ -1,2 +1,2 @@
 # books
-React project keeping track of books
+React project for tracking books
