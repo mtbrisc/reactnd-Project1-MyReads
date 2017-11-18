@@ -14,6 +14,10 @@ class BookSearch extends Component {
     if(term){
       BooksAPI.search(term, 0).then((books) => {
         if (books && books.length ){
+          /*
+            Merging arrays / objects inspired by Stackoverflow answer: 
+            https://stackoverflow.com/a/7146338
+          */
           let merged_books = [];
           for(var i in books){
              let shared = false;
@@ -24,7 +28,9 @@ class BookSearch extends Component {
                  }
              if(!shared) merged_books.push(books[i])
           }
-          merged_books = merged_books.concat(this.props.books);          
+          merged_books = merged_books.concat(this.props.books); 
+          
+                   
           this.setState({books: books.sort(sortBy('name'))});    
         } else {
           this.clearQuery();
