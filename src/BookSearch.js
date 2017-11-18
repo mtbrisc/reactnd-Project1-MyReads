@@ -2,23 +2,35 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
+import sortBy from 'sort-by'
 
 class BookSearch extends Component {
   state = {
     query: '',
-    searchResults: [],
-    idMap: {}
+    books: []
   }
 
   searchBooks = (term) => {
-
-    (
-      term && BooksAPI.search(term, 20).then((searchResults) => {
-        this.setState({ searchResults })
+    if(term){
+      BooksAPI.search(term, 0).then((books) => {
+        if (books && books.length ){
+          let merged_books = [];
+          for(var i in books){
+             let shared = false;
+             for (var j in this.props.books)
+                 if (this.props.books[j].id === books[i].id) {
+                     shared = true;
+                     break;
+                 }
+             if(!shared) merged_books.push(books[i])
+          }
+          merged_books = merged_books.concat(this.props.books);          
+          this.setState({books: books.sort(sortBy('name'))});    
+        } else {
+          this.clearQuery();
+        }
       })
-    ) || (
-      this.clearQuery()
-    )
+    }
   }
 
   updateQuery = (query) => {
@@ -29,12 +41,12 @@ class BookSearch extends Component {
   clearQuery = () => {
     this.setState({
       query: '',
-      searchResults: []
+      books: []
     })
-  }  
+  }
 
   render() {
-    const { searchResults, query } = this.state
+    const { books, query } = this.state
     const { onUpdateBook } = this.props
 
     return (
@@ -54,9 +66,9 @@ class BookSearch extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          {(searchResults.length > 0) && (
+          {(books.length > 0) && (
             <ol className="books-grid">
-              {searchResults.map((book) => (
+              {books.map((book) => (
                 <Book
                   book={book}
                   key={book.id}
