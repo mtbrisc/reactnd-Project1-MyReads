@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 import sortBy from 'sort-by'
+import {DebounceInput} from 'react-debounce-input';
 
 class BookSearch extends Component {
-  state = {
-    query: '',
-    books: []
+  constructor(props) {
+    super(props)
+    this.state = {
+      books : [],
+      query: ''
+    }
   }
 
   searchBooks = (term) => {
@@ -31,8 +35,8 @@ class BookSearch extends Component {
 
   clearQuery = () => {
     this.setState({
-      query: '',
-      books: []
+      books: [],
+      query: ''
     })
   }
 
@@ -47,8 +51,9 @@ class BookSearch extends Component {
             to="/"
             className="close-search"
           >Close</Link>
-          <div className="search-books-input-wrapper">
-            <input 
+          <div className="search-books-input-wrapper"> 
+            <DebounceInput
+              debounceTimeout={300}
               type="text"
               placeholder="Search by title or author"
               value={query}

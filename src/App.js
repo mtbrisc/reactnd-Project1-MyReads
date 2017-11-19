@@ -6,9 +6,12 @@ import BookSearch from './BookSearch'
 import './App.css'
 
 class BooksApp extends React.Component {
-  state = {
-    books : [],
-    idShelfObj : {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      books : [],
+      idShelfObj : {}
+    }
   }
 
   componentDidMount() {
