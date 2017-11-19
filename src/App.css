@@ -174,3 +174,9 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+input{
+  box-sizing:border-box;
+}
+input:focus { 
+  background:#EFEFEF;
+}

@@ -13,25 +13,8 @@ class BookSearch extends Component {
   searchBooks = (term) => {
     if(term){
       BooksAPI.search(term, 0).then((books) => {
-        if (books && books.length ){
-          /*
-            Merging arrays / objects inspired by Stackoverflow answer: 
-            https://stackoverflow.com/a/7146338
-          */
-          let merged_books = [];
-          for(var i in books){
-             let shared = false;
-             for (var j in this.props.books)
-                 if (this.props.books[j].id === books[i].id) {
-                     shared = true;
-                     break;
-                 }
-             if(!shared) merged_books.push(books[i])
-          }
-          merged_books = merged_books.concat(this.props.books); 
-          
-                   
-          this.setState({books: books.sort(sortBy('name'))});    
+        if (books && books.length ){  
+          this.setState({ books : books.sort(sortBy('title')) })   
         } else {
           this.clearQuery();
         }
@@ -53,7 +36,7 @@ class BookSearch extends Component {
 
   render() {
     const { books, query } = this.state
-    const { onUpdateBook } = this.props
+    const { onUpdateBook, idShelf } = this.props
 
     return (
       <div className="search-books">
@@ -81,7 +64,7 @@ class BookSearch extends Component {
                   image={book.imageLinks}
                   title={book.title}
                   authors={book.authors}
-                  shelf={book.shelf}
+                  shelf={idShelf[book.id] ? idShelf[book.id] : "none"}
                   onUpdateBook={(book, event) => {
                     onUpdateBook(book, event)
                   }}
