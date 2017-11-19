@@ -16,9 +16,11 @@ class BookSearch extends Component {
         if (books && books.length ){  
           this.setState({ books : books.sort(sortBy('title')) })   
         } else {
-          this.clearQuery();
+          this.setState({ books : [] })   
         }
       })
+    } else {
+      this.setState({ books : [] })
     }
   }
 
